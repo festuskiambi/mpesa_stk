@@ -1,5 +1,5 @@
-require 'base64'
-require 'redis'
+require "base64"
+require "redis"
 
 module MpesaStk
   class AccessToken
@@ -10,8 +10,8 @@ module MpesaStk
     end
 
     def initialize
-      @key = ENV['key']
-      @secret = ENV['secret']
+      @key = MpesaStk.configuration.consumer_key
+      @secret = MpesaStk.configuration.consumer_secret
       @redis = Redis.new
 
       load_from_redis
@@ -43,9 +43,9 @@ module MpesaStk
         @expires_in = nil
       else
         parsed = JSON.parse(data)
-        @token = parsed['access_token']
-        @timestamp = parsed['time_stamp']
-        @expires_in = parsed['expires_in']
+        @token = parsed["access_token"]
+        @timestamp = parsed["time_stamp"]
+        @expires_in = parsed["expires_in"]
       end
     end
 
@@ -61,25 +61,26 @@ module MpesaStk
     def get_new_access_token
       response = HTTParty.get(url, headers: headers)
 
-      hash = JSON.parse(response.body).merge(Hash['time_stamp',Time.now.to_i])
+      hash = JSON.parse(response.body).merge(Hash["time_stamp", Time.now.to_i])
       @redis.set @key, hash.to_json
     end
 
     private
-      def url
-        "#{ENV['base_url']}#{ENV['token_generator_url']}"
-      end
 
-      def headers
-        encode = encode_credentials @key, @secret
-        headers = {
-          "Authorization" => "Basic #{encode}"
-        }
-      end
+    def url
+      "#{MpesaStk.configuration.daraja_base_url}/oauth/v1/generate?grant_type=client_credentials"
+    end
 
-      def encode_credentials key, secret
-        credentials = "#{key}:#{secret}"
-        encoded_credentials = Base64.encode64(credentials).split("\n").join
-      end
+    def headers
+      encode = encode_credentials @key, @secret
+      headers = {
+        "Authorization" => "Basic #{encode}",
+      }
+    end
+
+    def encode_credentials(key, secret)
+      credentials = "#{key}:#{secret}"
+      encoded_credentials = Base64.encode64(credentials).split("\n").join
+    end
   end
 end
