@@ -8,7 +8,7 @@ module MpesaStk
       end
     end
 
-    attr_reader :token, :amount, :phone_number
+    attr_reader :token, :amount, :phone_number, :ref_token
 
     def initialize(amount, phone_number, ref_token)
       @token = MpesaStk::AccessToken.call
