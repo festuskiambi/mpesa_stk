@@ -4,7 +4,8 @@ module MpesaStk
                   :consumer_key,
                   :consumer_secret,
                   :business_short_code,
-                  :business_pass_key
+                  :business_pass_key,
+                  :callback_url
 
     def initialize
       # Values are set because default values are not provided and must be set by the user
