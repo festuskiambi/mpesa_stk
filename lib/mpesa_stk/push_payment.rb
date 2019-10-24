@@ -3,17 +3,18 @@ require "mpesa_stk/access_token"
 module MpesaStk
   class PushPayment
     class << self
-      def call(amount, phone_number)
-        new(amount, phone_number).push_payment
+      def call(amount, phone_number, ref_token = "")
+        new(amount, phone_number, ref_token).push_payment
       end
     end
 
     attr_reader :token, :amount, :phone_number
 
-    def initialize(amount, phone_number)
+    def initialize(amount, phone_number, ref_token)
       @token = MpesaStk::AccessToken.call
       @amount = amount
       @phone_number = phone_number
+      @ref_token = ref_token
     end
 
     def push_payment
@@ -44,7 +45,7 @@ module MpesaStk
         PartyA: "#{phone_number}",
         PartyB: "#{MpesaStk.configuration.business_short_code}",
         PhoneNumber: "#{phone_number}",
-        CallBackURL: "#{MpesaStk.configuration.callback_url}",
+        CallBackURL: "#{MpesaStk.configuration.callback_url}?ref_token=#{ref_token}",
         AccountReference: generate_bill_reference_number(5),
         TransactionDesc: generate_bill_reference_number(5),
       }.to_json
