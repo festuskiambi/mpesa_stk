@@ -14,6 +14,7 @@ module MpesaStk
       @consumer_secret = nil
       @business_short_code = nil
       @business_pass_key = nil
+      @callback_url = nil
     end
   end
 end

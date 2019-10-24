@@ -36,15 +36,15 @@ module MpesaStk
 
     def body
       {
-        BusinessShortCode: "#{ENV["business_short_code"]}",
+        BusinessShortCode: "#{MpesaStk.configuration.business_short_code}",
         Password: generate_password,
         Timestamp: "#{timestamp}",
         TransactionType: "CustomerPayBillOnline",
         Amount: "#{amount}",
         PartyA: "#{phone_number}",
-        PartyB: "#{ENV["business_short_code"]}",
+        PartyB: "#{MpesaStk.configuration.business_short_code}",
         PhoneNumber: "#{phone_number}",
-        CallBackURL: "#{ENV["callback_url"]}",
+        CallBackURL: "#{MpesaStk.configuration.callback_url}",
         AccountReference: generate_bill_reference_number(5),
         TransactionDesc: generate_bill_reference_number(5),
       }.to_json
@@ -63,7 +63,7 @@ module MpesaStk
     # passkey
     # timestamp
     def generate_password
-      key = "#{ENV["business_short_code"]}#{ENV["business_passkey"]}#{timestamp}"
+      key = "#{MpesaStk.configuration.business_short_code}#{MpesaStk.configuration.business_pass_key}#{timestamp}"
       Base64.encode64(key).split("\n").join
     end
   end
