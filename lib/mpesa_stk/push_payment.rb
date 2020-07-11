@@ -43,7 +43,7 @@ module MpesaStk
         TransactionType: "CustomerBuyGoodsOnline",
         Amount: "#{amount}",
         PartyA: "#{phone_number}",
-        PartyB: "#{MpesaStk.configuration.business_short_code}",
+        PartyB: "#{MpesaStk.configuration.party_b}",
         PhoneNumber: "#{phone_number}",
         CallBackURL: "#{MpesaStk.configuration.callback_url}?ref_token=#{ref_token}",
         AccountReference: generate_bill_reference_number(5),
