@@ -40,7 +40,7 @@ module MpesaStk
         BusinessShortCode: "#{MpesaStk.configuration.business_short_code}",
         Password: generate_password,
         Timestamp: "#{timestamp}",
-        TransactionType: "CustomerPayBillOnline",
+        TransactionType: "CustomerBuyGoodsOnline",
         Amount: "#{amount}",
         PartyA: "#{phone_number}",
         PartyB: "#{MpesaStk.configuration.business_short_code}",
